@@ -1,0 +1,27 @@
+{
+  "name": "construction-app",
+  "version": "1.0.0",
+  "description": "Construction project management app with Prisma ORM",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx-ops": "^0.37.4",
+    "@prisma/client": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "jsonwebtoken": "^9.0.0",
+    "socket.io": "^4.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "prisma": "^5.0.0"
+  }
+}

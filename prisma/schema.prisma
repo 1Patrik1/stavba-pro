@@ -1,0 +1,99 @@
+// Konfigurace databáze
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// [AUTH_RBAC] Uživatelé a Role
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  role         Role         @default(WORKER)
+  firstName    String
+  lastName     String
+  attendances  Attendance[]
+  tasks        Task[]
+  messages     Message[]
+  logs         DiaryLog[]
+  createdAt    DateTime     @default(now())
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  WORKER
+}
+
+// [PROJECTS] Projekty a GPS Mapy
+model Project {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  latitude    Float
+  longitude   Float
+  radius      Float        // Geofence radius v metrech
+  tasks       Task[]
+  attendances Attendance[]
+  diaryLogs   DiaryLog[]
+  createdAt   DateTime     @default(now())
+}
+
+// [TASKS_PHOTOS] Úkoly a Fotodokumentace
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  status      String   @default("PENDING") // PENDING, IN_PROGRESS, DONE
+  latitude    Float?
+  longitude   Float?
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  assigneeId  String?
+  assignee    User?    @relation(fields: [assigneeId], references: [id])
+  photoUrl    String?  // Odkaz na AWS S3
+  createdAt   DateTime @default(now())
+}
+
+// [ATTENDANCE_GPS] Docházka s GPS validací
+model Attendance {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  checkIn   DateTime  @default(now())
+  checkOut  DateTime?
+  inLat     Float
+  inLng     Float
+  outLat    Float?
+  outLng    Float?
+  isValid   Boolean   @default(true) // Validováno vůči Geofence
+}
+
+// [CHAT] Real-time Chat
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  taskId    String?  // Kontextový chat vázaný na úkol
+  createdAt DateTime @default(now())
+}
+
+// [LOGS] Stavební deník
+model DiaryLog {
+  id          String   @id @default(uuid())
+  date        DateTime @default(now())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  weather     String?  // Auto-vyplněno z API
+  workDone    String   // Agregováno ze splněných úkolů
+  workers     Int      // Agregováno z docházky
+  isApproved  Boolean  @default(false)
+}
