@@ -4,7 +4,7 @@ import { s } from '../styles';
 export default function Login({ setUser }) {
   const [isReg, setIsReg] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', pass: '' });
-  const api = "http://localhost:3000/api";
+  const api = "https://backend-9xye.onrender.com/api";
 
   const handleSubmit = async () => {
     const endpoint = isReg ? '/register' : '/login';

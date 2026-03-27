@@ -7,7 +7,7 @@ export default function WorkerDashboard({ user, setUser }) {
   const [messages, setMessages] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const api = "http://localhost:3000/api";
+  const api = "https://backend-9xye.onrender.com/api";
   const fileInputRef = useRef(null);
 
   const fetchTasks = async () => { const r = await fetch(`${api}/tasks/${user.projekt}`); const d = await r.json(); if(d.success) setTasks(d.data); };

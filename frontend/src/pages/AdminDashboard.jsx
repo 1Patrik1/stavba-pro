@@ -48,7 +48,7 @@ function ThreeDScene({ route, system, selectedId }) {
 // --- 2. HLAVNÍ APLIKACE (ADMIN DASHBOARD) ---
 export default function AdminDashboard({ user, setUser }) {
   const [tab, setTab] = useState('prehled'); 
-  const api = "http://localhost:3000/api";
+  const api = "https://backend-9xye.onrender.com/api";
   const pdfInputRef = useRef(null);
   
   // VŠECHNA DATA APLIKACE (OBNOVENO)
