@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import WorkerDashboard from './pages/WorkerDashboard';
@@ -11,14 +12,29 @@ export default function App() {
 
   // 1. Pokud nikdo není přihlášený, ukážeme Přihlašovací bránu
   if (!user) {
-    return <Login setUser={setUser} />;
+    return (
+      <>
+        <Login setUser={setUser} />
+        <Analytics />
+      </>
+    );
   }
 
   // 2. Pokud se přihlásil Admin (nebo náš speciální testovací e-mail), ukážeme Řídící věž
   if (user.role === 'Admin' || user.email === 'admin@stavba.cz') {
-    return <AdminDashboard user={user} setUser={setUser} />;
+    return (
+      <>
+        <AdminDashboard user={user} setUser={setUser} />
+        <Analytics />
+      </>
+    );
   }
 
   // 3. Všem ostatním ukážeme Terminál pro dělníky
-  return <WorkerDashboard user={user} setUser={setUser} />;
+  return (
+    <>
+      <WorkerDashboard user={user} setUser={setUser} />
+      <Analytics />
+    </>
+  );
 }
